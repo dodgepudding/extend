@@ -726,6 +726,11 @@ class DbMongo extends Db{
                 }elseif(in_array($con,array('in','nin','not in'))){ // IN NIN 运算
                     $data = is_string($val[1])? explode(',',$val[1]):$val[1];
                     $k = '$'.$this->comparison[$con];
+                    if ($key == '_id') {
+			            foreach($data as &$val) {
+			            	 if (is_string($val))  $val = new MongoId($val);
+			        		}
+			   	   }
                     $query[$key]  =  array($k=>$data);
                 }elseif('all'==$con){ // 满足所有指定条件
                     $data = is_string($val[1])? explode(',',$val[1]):$val[1];
